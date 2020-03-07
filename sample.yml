@@ -1,0 +1,67 @@
+- name: zabbix リポジトリの追加
+  yum:
+    name: https://repo.zabbix.com/zabbix/4.0/rhel/7/x86_64/zabbix-release-4.0-2.el7.noarch.rpm
+    state: present
+
+- name: yum キャッシュの削除
+  command: yum clean all
+  args:
+    warn: no
+  changed_when: false
+
+- name: zabbix agent のインストール
+  yum:
+    name: zabbix-agent
+    state: latest
+
+- name: zabbix_agentd.conf のオリジナルファイル作成
+  copy:
+    src: /etc/zabbix/zabbix_agentd.conf
+    dest: /etc/zabbix/zabbix_agentd.conf.org
+    remote_src: yes
+    mode: preserve
+    force: no
+
+- name: zabbix サーバーの IP を設定
+  lineinfile:
+    path: /etc/zabbix/zabbix_agentd.conf
+    regexp: "^Server="
+    insertafter: "^Server="
+    line: "Server=192.168.200.60"
+  notify: restart zabbix agent
+
+- name: zabbix サーバーの IP (Active Check 用)を設定
+  lineinfile:
+    path: /etc/zabbix/zabbix_agentd.conf
+    regexp: "^ServerActive="
+    insertafter: "^ServerActive="
+    line: "ServerActive=192.168.200.60"
+  notify: restart zabbix agent
+
+- name: 固定ホスト名を無効化
+  replace:
+    path: /etc/zabbix/zabbix_agentd.conf
+    regexp: "^Hostname=.*"
+  notify: restart zabbix agent
+
+- name: システムのホスト名を取得
+  lineinfile:
+    path: /etc/zabbix/zabbix_agentd.conf
+    regexp: "^HostnameItem="
+    insertafter: "^#\\s*HostnameItem="
+    line: "HostnameItem=system.hostname"
+  notify: restart zabbix agent
+
+- name: 自動登録用のメタデータをセット
+  lineinfile:
+    path: /etc/zabbix/zabbix_agentd.conf
+    regexp: "^HostMetadata="
+    insertafter: "^#\\s*HostMetadata="
+    line: "HostMetadata=LINUX ILE"
+  notify: restart zabbix agent
+
+- include: redhat_yum_conf.yml
+  when: ansible_distribution == "RedHat"
+
+- include: centos_yum_conf.yml
+  when: ansible_distribution == "CentOS"
