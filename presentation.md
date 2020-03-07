@@ -33,8 +33,10 @@ VS Code を使いこなして仕事の効率を高めることを目的としま
 題材となるファイルをダウンロードするため、 git clone し、フォルダを VS Code で開いてください。
 
 ```
-git clone https://github.com/mseninc/z03-vscode-shortcut.git
+git clone https://github.com/mseninc/study-vscode-shortcut.git
 ```
+
+編集するファイルとして `sample.yml` を使います。
 
 ---
 
