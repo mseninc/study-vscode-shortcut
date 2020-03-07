@@ -36,6 +36,8 @@ VS Code を使いこなして仕事の効率を高めることを目的としま
 git clone https://github.com/mseninc/z03-vscode-shortcut.git
 ```
 
+とりあえず `sample.yml` を使います。
+
 ---
 
 ## 編集系
@@ -126,3 +128,16 @@ git clone https://github.com/mseninc/z03-vscode-shortcut.git
 ### 課題12
 
 - 63 行目の `RedhatYumConf` を `redhat-yum-conf` に変更してください。
+
+---
+
+## 複雑なファイルの編集
+
+`sample.vue` を開き、下記のように `()` 内の手数を目安に編集してください。
+※複数箇所の選択は1手、カーソル移動も1手として数えます
+
+- すべての `div` タグを選択し、 `p` タグに変更する (3手)
+- `methods` (L127) の中にある関数をスネークケースに変更する (3手)
+    - (`speakText()` → `speak_text()` など)
+- `//` からはじまるコメントをすべて削除する (4手)
+- `data` (L116) の `return` の各値をすべて `null` に書き換える (6手)
